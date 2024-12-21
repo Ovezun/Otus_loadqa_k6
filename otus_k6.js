@@ -110,7 +110,7 @@ export function buyTicket() {
 
   const random_from = Math.floor(Math.random() * citys_from.length);
   const cityFrom = citys_from[random_from];
-  console.log(cityFrom);
+  //console.log(cityFrom);
 
   const citys_to = flight_page.html().find('select[name=arrive]').children().map(
     // function (indx, item) {
@@ -122,7 +122,7 @@ export function buyTicket() {
 
   const random_to = Math.floor(Math.random() * citys_to.length);
   const cityTo = citys_to[random_to];
-  console.log(cityTo);
+  //console.log(cityTo);
 
   const dateFrom = new Date();
   dateFrom.setDate(dateFrom.getDate() + 1);
@@ -178,7 +178,7 @@ export function buyTicket() {
   });
 
   let welcomPageAgain = http.get(base_url + '/webtours/home.html');
-  console.log(welcomPageAgain);
+  //console.log(welcomPageAgain);
   check(welcomPageAgain, {
     'status welcomPageAgain is 200': (r) => r.status === 200,
     'verify Welcome': (r) => r.body.includes('Welcome'),
