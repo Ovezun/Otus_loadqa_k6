@@ -1,32 +1,3 @@
-# k6-sampler
+ДЗ по K6
 
-Simple k6 load test for OTUS
-
-```shell
-k6 run sample.js
-```
-
-With logs:
-```shell
-k6 run  --log-format raw --console-output=test.log --out csv=test_result.csv sample.js
-```
-
-For debug
-```shell
-k6 run --http-debug="full" sample.js
-```
-
-## Docker
-
-
-Build docker image
-
-```shell
-docker build -t otus/k6:1.0.0 .
-``` 
-
-Start k6 test:
-
-```shell
-docker run -it --rm otus/k6:1.0.0
-```
+В файле otus_k6.js  одовременно и идет покупка билета на сайте  webtours  и подается нагрузка на ya.ru и  www.ru
