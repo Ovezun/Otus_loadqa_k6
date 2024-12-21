@@ -9,10 +9,50 @@ const data = new SharedArray('get Users', function () {
     return file.users;
   });
 
-export default function() {
+export const options = {
+    discardResponseBodies: false,
+  scenarios: {
+    ya_ru: {
+      exec: 'yandex', 
+      executor: 'ramping-arrival-rate',
+      startRate: 0,
+      timeUnit: '1m',  
+      preAllocatedVUs: 50,
+      stages: [
+        { target: 60, duration: '5m' },
+        { target: 60, duration: '10m' },
+        { target: 72, duration: '5m' },
+        { target: 72, duration: '10m' },
+        { target: 1, duration: '1m' }
+      ],
+      },
+      www_ru: {
+        exec: 'wwwru', 
+        executor: 'ramping-arrival-rate',
+        startRate: 0,
+        timeUnit: '1m',  
+        preAllocatedVUs: 50,
+          stages: [
+          { target: 120, duration: '5m' },
+          { target: 120, duration: '10m' },
+          { target: 144, duration: '5m' },
+          { target: 144, duration: '10m' },
+          { target: 1, duration: '1m' }
+          ],
+      },
+      ticket: {
+        exec: 'buyTicket', 
+        executor: 'shared-iterations',
+        vus: 1,
+        iterations: 1
 
-    //урл  сайта
-   
+      },
+    },
+  };
+
+export function buyTicket() {
+  group('buyTicket', ()=> {
+  //урл  сайта
   const base_url = 'http://webtours.load-test.ru:1080';
 
   let welcomPage = http.get(base_url+'/cgi-bin/welcome.pl');
@@ -143,8 +183,32 @@ export default function() {
     'status welcomPageAgain is 200': (r) => r.status === 200,
     'verify Welcome': (r) => r.body.includes('Welcome'),
   });
+}) 
+}
+ 
+export function yandex() {
+  group('yandex', () => {
+    let http_ya_ru = http.get('http://ya.ru');
+  check(http_ya_ru, {
+      'verify yandex status code 200': (http_ya_ru) => http_ya_ru.status===200,
 
-    
+  })
+  })
+  
 }
 
-      
+export function wwwru() {
+  group ('wwwru', () => {
+    let http_www_ru = http.get('http://www.ru');
+  check(http_www_ru, {
+      'status code www.ru is 200': (http_www_ru) => http_www_ru.status===200,
+  })
+  })
+  
+}
+ 
+export default function() {
+  buyTicket();
+  yandex();
+  wwwru();
+}      
